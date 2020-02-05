@@ -1,17 +1,7 @@
 const util = require('util')
 const DocumentClient = require('../helpers/initializeDynamo')
+const { determineNameOfActionItem } = require('../helpers')
 const { capitalizeWord } = require('../../util/formatter')
-
-const actionTypeItemMap = {
-  'Delete': 'Key',
-  'Put': 'Item',
-  'Update': 'Key',
-  'ConditionCheck': 'Key'
-}
-
-const determineNameOfActionItem = actionType => {
-  return actionTypeItemMap[actionType]
-}
 
 const generateTransactionalOperations = operations => {
   const constructedOperations = operations.map(operation => {

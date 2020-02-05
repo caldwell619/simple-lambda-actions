@@ -1,16 +1,14 @@
-const policies = require('./partial-user.json.js')
-const TableName = process.env.TABLE_NAME
+const policies = require('./partial-user')
 const partitionKeyName = process.env.TABLE_PARTITION_KEY
 const rangeKeyName = process.env.TABLE_RANGE_KEY
 
-const aggregatePoliciesIntoTransactOps = policies => {
+const aggregatePoliciesIntoBatchWriteParams = policies => {
   return Object.entries(policies).map(policy => {
     const key = policy[0]
     const value = policy[1]
     return {
       operationType: 'put',
-      TableName,
-      itemSpecificInfo: {
+      recordInformation: {
         [partitionKeyName]: 'partial-user-policy',
         [rangeKeyName]: key,
         ...value
@@ -19,6 +17,6 @@ const aggregatePoliciesIntoTransactOps = policies => {
   })
 }
 
-const formattedPolicies = aggregatePoliciesIntoTransactOps(policies)
+const formattedPolicies = aggregatePoliciesIntoBatchWriteParams(policies)
 
 module.exports = formattedPolicies

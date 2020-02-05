@@ -18,15 +18,17 @@ const determineIfRangeKeyIsUsed = (searchConfig) => {
     rangeKeySearchTerm, 
     rangeKeyComparisonOperator
   } = searchConfig
-  if(!allowableComparisonOperators[rangeKeyComparisonOperator]) {
-    throw new Error('Comparison operator not allowed')
+
+  // if a key was provided, but does not match
+  if(rangeKeyComparisonOperator && !allowableComparisonOperators[rangeKeyComparisonOperator]) {
+    throw new Error('Comparison operator not in supported list')
   }
   // only query based on the partition, not using the range key
   let KeyConditionExpression = `${partitionKeyName} = :par`
   let ExpressionAttributeValues = { ':par': partitionKeySearchTerm }
   
   // if a range key was be provided, use it
-  if(!rangeKeyName) {
+  if(rangeKeyName) {
     KeyConditionExpression = `${partitionKeyName} = :par and ${rangeKeyComparisonOperator} (${rangeKeyName} , :ran )`
     ExpressionAttributeValues = {
       ':par': partitionKeySearchTerm,
