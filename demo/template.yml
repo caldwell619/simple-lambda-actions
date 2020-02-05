@@ -103,6 +103,22 @@ Resources:
             Path: /dynamo/transact-write
             Method: post
             RestApiId: !Ref BuyNowAPI
+            
+########### DB Seeder ###########
+  
+  PartialUserPolicySeeder:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/seeder/partial-policy
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /seeder/partial-user-policy
+            Method: post
+            RestApiId: !Ref BuyNowAPI
 
 ########### Secrets Manager ###########
   GetSecretValue:
