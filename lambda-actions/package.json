@@ -1,0 +1,28 @@
+{
+	"name": "simple-lambda-actions",
+	"version": "1.2.40",
+	"description": "Library for common lambda actions",
+	"main": "dist/index.js",
+	"author": "Christopher Caldwell",
+	"files": [
+		"dist/*"
+	],
+	"scripts": {
+		"test:unit": "jest /tests/unit",
+		"jest:integration": "jest /tests/integration",
+		"test:integration": "sh tests/integration/test.sh",
+		"lint": "eslint --no-fix src/",
+		"release": "standard-version",
+		"publish-release": "git push --follow-tags origin master && npm publish",
+		"deploy": "sh scripts/deploy.sh"
+	},
+	"peerDependencies": {
+		"jsonwebtoken": "^8.5.1",
+		"aws-sdk": "^2.611.0"
+	},
+	"devDependencies": {
+		"eslint": "^6.8.0",
+		"standard-version": "^7.0.0"
+	},
+	"dependencies": {}
+}

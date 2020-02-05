@@ -1,0 +1,272 @@
+Transform: "AWS::Serverless-2016-10-31"
+Globals:
+  Api:
+    TracingEnabled: true
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+  Function:
+    Runtime: nodejs10.x
+    Tracing: Active
+    Timeout: 30
+    Environment:
+      Variables:
+        TABLE_NAME: !Sub ${TABLE_NAME}
+        SIGNING_KEY_NAME: !Sub ${SIGNING_KEY_NAME}
+        TABLE_PARTITION_KEY: !Sub ${TABLE_PARTITION_KEY}
+        TABLE_RANGE_KEY: !Sub ${TABLE_RANGE_KEY}
+Resources:
+########### Lambda ###########
+  LambdaLocalCorsStub:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/options/
+      Handler: index.handler
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      FunctionName: cors_handler_FF
+      Timeout: 30
+      Events:
+        ClockInOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BuyNowAPI
+            Path: /{cors+}
+            Method: OPTIONS
+
+################################################
+################## Lambdas #####################
+################################################
+
+  GetItem:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/dynamo/get-item
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /dynamo/get-item
+            Method: get
+            RestApiId: !Ref BuyNowAPI
+  PutItem:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/dynamo/put-item
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /dynamo/put-item
+            Method: post
+            RestApiId: !Ref BuyNowAPI
+  QueryItem:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/dynamo/query-item
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /dynamo/query-item
+            Method: get
+            RestApiId: !Ref BuyNowAPI
+  UpdateItem:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/dynamo/update-item
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /dynamo/update-item
+            Method: put
+            RestApiId: !Ref BuyNowAPI
+  TransactWrite:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/dynamo/transact-write
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /dynamo/transact-write
+            Method: post
+            RestApiId: !Ref BuyNowAPI
+
+########### Secrets Manager ###########
+  GetSecretValue:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/secrets-manager/get-secret
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /secrets-manager/get-secret
+            Method: get
+            RestApiId: !Ref BuyNowAPI
+
+
+########### Auth ###########
+  ValidateToken:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/auth/validate-token
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /auth/validate-token
+            Method: get
+            RestApiId: !Ref BuyNowAPI
+  GenerateToken:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/auth/generate-token
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /auth/generate-token
+            Method: post
+            RestApiId: !Ref BuyNowAPI
+  ValidateResourcePermissions:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/auth/validate-resource-permissions
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /auth/{institutionId}/validate-resource-permissions
+            Method: post
+            RestApiId: !Ref BuyNowAPI
+  FullServiceAuth:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/auth/full-service
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /auth/{institutionId}/full-service
+            Method: post
+            RestApiId: !Ref BuyNowAPI
+
+########### API ###########
+  BuyNowAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub ${API_NAME}
+      StageName: !Sub ${STAGE}
+      DefinitionBody:
+        Fn::Transform:
+          Name: "AWS::Include"
+          Parameters:
+            Location: !Sub s3://${S3_BUCKET}/swagger-api-template.json
+
+########### DB ###########
+  BuyNowTestDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${STAGE}-${TABLE_NAME}
+      AttributeDefinitions:
+        - AttributeName: !Sub ${TABLE_PARTITION_KEY}
+          AttributeType: S
+        - AttributeName: !Sub ${TABLE_RANGE_KEY}
+          AttributeType: S
+        - AttributeName: !Sub ${TABLE_GSI_1_PARTITION_KEY}
+          AttributeType: S
+        - AttributeName: !Sub ${TABLE_GSI_1_RANGE_KEY}
+          AttributeType: S
+      KeySchema:
+        - AttributeName: !Sub ${TABLE_PARTITION_KEY}
+          KeyType: HASH
+        - AttributeName: !Sub ${TABLE_RANGE_KEY}
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: !Sub ${TABLE_GSI_1_NAME}
+          KeySchema:
+            - AttributeName: !Sub ${TABLE_GSI_1_PARTITION_KEY}
+              KeyType: "HASH"
+            - AttributeName: !Sub ${TABLE_GSI_1_RANGE_KEY}
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: "5"
+            WriteCapacityUnits: "5"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  LambdaActionsTestRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+      Policies:
+      - PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
+          - Action:
+            - secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Fn::Join:
+              - ''
+              - - 'arn:aws:secretsmanager:'
+                - Ref: AWS::Region
+                - ':'
+                - Ref: AWS::AccountId
+                - :secret/
+                - Fn::Sub: ${SIGNING_KEY_NAME}
+          - Action:
+            - dynamodb:GetItem
+            - dynamodb:DeleteItem
+            - dynamodb:PutItem
+            Effect: Allow
+            Resource:
+              Fn::Join:
+              - ''
+              - - 'arn:aws:dynamodb:'
+                - Ref: AWS::Region
+                - ':'
+                - Ref: AWS::AccountId
+                - :table/
+                - Fn::Sub: ${STAGE}-${TABLE_NAME}
+            PolicyName: !Sub ${STAGE}-LambdaActionsTest

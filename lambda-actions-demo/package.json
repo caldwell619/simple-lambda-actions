@@ -1,0 +1,25 @@
+{
+	"name": "alternate-api",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"directories": {
+		"doc": "docs",
+		"lib": "lib"
+	},
+	"scripts": {
+		"install-helper": "sh scripts/build/update-lib-version.sh",
+		"dev": "sh scripts/build/start-local-api.sh"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://caldwell8814@dev.azure.com/caldwell8814/Buy%20Now%20Alternate%20API/_git/Buy%20Now%20Alternate%20API"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {},
+	"devDependencies": {
+		"fs-extra": "^8.1.0"
+	}
+}

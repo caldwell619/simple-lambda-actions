@@ -1,0 +1,564 @@
+{
+	"swagger": "2.0",
+	"info": { "version": "1.0", "title": "buy-now" },
+	"host": "fr6pnyhq8e.execute-api.us-east-1.amazonaws.com",
+	"basePath": "/",
+	"schemes": ["https"],
+	"paths": {
+		"/dynamo/get-item": {
+			"get": {
+				"x-amazon-apigateway-request-validator": "Validate query string parameters",
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetItem.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{ "name": "identifier", "in": "query", "required": true },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/dynamo/put-item": {
+			"post": {
+				"x-amazon-apigateway-request-validator": "Validate body",
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutItem.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "PutItem",
+						"required": true,
+						"additionalProperties": true,
+						"schema": { "$ref": "#/definitions/PutItem" }
+					}
+				]
+			}
+		},
+		"/dynamo/query-item": {
+			"get": {
+				"x-amazon-apigateway-request-validator": "Validate query string parameters",
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${QueryItem.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"type": "string"
+					},
+					{ "name": "identifier", "in": "query", "required": true },
+					{ "name": "resourceType", "in": "query", "required": true }	
+				]
+			}
+		},
+		"/dynamo/update-item": {
+			"put": {
+				"x-amazon-apigateway-request-validator": "Validate body",
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UpdateItem.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "UpdateItem",
+						"required": true,
+						"additionalProperties": true,
+						"schema": { "$ref": "#/definitions/UpdateItem" }
+					}
+				]
+			}
+		},
+		"/dynamo/transact-write": {
+			"post": {
+				"x-amazon-apigateway-request-validator": "Validate body",
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${TransactWrite.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "UpdateItem",
+						"required": true,
+						"additionalProperties": true,
+						"schema": { "$ref": "#/definitions/TransactWrite" }
+					}
+				]
+			}
+		},
+		"/secrets-manager/get-secret": {
+			"get": {
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetSecretValue.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/auth/generate-token": {
+			"post": {
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GenerateToken.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/auth/validate-token": {
+			"get": {
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ValidateToken.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/auth/{institutionId}/validate-resource-permissions": {
+			"post": {
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ValidateResourcePermissions.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "institutionId",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/auth/{institutionId}/full-service": {
+			"post": {
+				"responses": {
+					"200": {
+						"description": "Valid Response",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"400": {
+						"description": "Schema Failure",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					},
+					"502": {
+						"description": "Error executing the Lambda",
+						"headers": {
+							"Access-Control-Allow-Origin": { "type": "string" },
+							"Access-Control-Allow-Methods": { "type": "string" },
+							"Access-Control-Allow-Headers": { "type": "string" }
+						}
+					}
+				},
+				"x-amazon-apigateway-integration": {
+					"uri": {
+						"Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${FullServiceAuth.Arn}/invocations"
+					},
+					"passthroughBehavior": "when_no_match",
+					"httpMethod": "POST",
+					"type": "aws_proxy"
+				},
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "institutionId",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		}
+	},
+	"definitions": {
+		"PutItem": {
+			"type": "object",
+			"required": [
+				"identifier",
+				"resourceType"
+			],
+			"properties": {
+				"identifier": {
+					"type": "string",
+					"pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+				},
+				"resourceType": { "type": "string", "pattern": "^[\\S]*$" }
+			}
+		},
+		"UpdateItem": {
+			"type": "object",
+			"required": [
+				"identifier",
+				"resourceType"
+			],
+			"properties": {
+				"identifier": {
+					"type": "string",
+					"pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+				},
+				"resourceType": { "type": "string", "pattern": "^[\\S]*$" }
+			}
+		},
+		"TransactWrite": {
+			"type": "object",
+			"required": [
+				"identifier",
+				"resourceType"
+			],
+			"properties": {
+				"identifier": {
+					"type": "string",
+					"pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+				},
+				"resourceType": { "type": "string", "pattern": "^[\\S]*$" }
+			}
+		}	
+	},
+	"x-amazon-apigateway-request-validators": {
+		"Validate body": {
+			"validateRequestParameters": false,
+			"validateRequestBody": true
+		},
+		"Validate query string parameters": {
+			"validateRequestParameters": true,
+			"validateRequestBody": false
+		}
+	}
+}
