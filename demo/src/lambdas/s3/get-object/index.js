@@ -5,12 +5,11 @@ const config = {}
 
 const Bucket = 'lambda-actions-test'
 const Key = 'partial-user.json'
-
+const params = { Bucket, Key }
 
 exports.handler = async event => {
   const responseConfig = extractResponseParams(event.httpMethod, config)
   const ResponseHandler = new Responder(responseConfig)
-  const params = { Bucket, Key }
   try {
     const data = await getObject(params)
     return ResponseHandler.respond(data, 200)

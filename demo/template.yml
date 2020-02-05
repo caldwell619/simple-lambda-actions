@@ -179,6 +179,19 @@ Resources:
             Path: /auth/generate-token
             Method: post
             RestApiId: !Ref BuyNowAPI
+  GenerateTokenWithPolicy:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/auth/generate-token-with-policy
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /auth/generate-token/policy
+            Method: get
+            RestApiId: !Ref BuyNowAPI
   ValidateResourcePermissions:
     Type: AWS::Serverless::Function
     Properties:

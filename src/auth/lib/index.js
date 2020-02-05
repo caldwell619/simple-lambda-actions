@@ -2,9 +2,12 @@ const validateToken = require('./validateToken')
 const generateToken = require('./generateToken')
 const determineResourceAccess = require('./determineResourceAccess')
 const fullServiceAuth = require('./fullService')
+const constructTokenPayload = require('./constructTokenPayload')
 
-exports.validateToken = validateToken
-exports.generateToken = generateToken
-exports.determineResourceAccess = determineResourceAccess
-
-module.exports = fullServiceAuth
+module.exports = {
+  validateToken,
+  generateToken,
+  determineResourceAccess,
+  constructTokenPayload,
+  fullServiceAuth
+}
