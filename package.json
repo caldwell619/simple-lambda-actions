@@ -4,6 +4,13 @@
 	"description": "Library for common lambda actions",
 	"main": "dist/index.js",
 	"author": "Christopher Caldwell",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/caldwell619/simple-lambda-actions"
+	},
+	"bugs": {
+		 "url" : "https://github.com/caldwell619/simple-lambda-actions/issues"
+	},
 	"files": [
 		"dist/*"
 	],

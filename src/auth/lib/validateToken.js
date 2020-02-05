@@ -8,13 +8,19 @@ const validateToken = (givenToken, signingKey) => {
       statusCode: 403
     })
   }
+  if(!signingKey){
+    throw new CustomError({
+      message: 'Signing key invalid',
+      statusCode: 400
+    })
+  }
   try {
     const tokenData = jwt.verify(givenToken, signingKey)
     return tokenData
   } catch(error){
     throw new CustomError({
       message: error.message,
-      statusCode: error.statusCode
+      statusCode: error.statusCode || 403
     })
   }
 }

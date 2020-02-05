@@ -4,13 +4,13 @@ const getSecretValue = require('../../secrets-manager/getSecretValue')
 const validateToken = require('../lib/validateToken')
 const determineResourceAccess = require('../lib/determineResourceAccess')
 
-const fullServiceAuth = (SecretId, event) => {
+const fullServiceAuth = (secretsManagerParams, event) => {
   const givenToken = event.headers['Authorization'] || ''
-  const secretsManagerParams = { SecretId }
+  const { SecretId, nameOfSecret } = secretsManagerParams
   return new Promise(async (resolve, reject) => {
     try {
-      const secretValue = await getSecretValue(secretsManagerParams)
-      const signingKey = secretValue[SecretId]
+      const secretValue = await getSecretValue({ SecretId })
+      const signingKey = secretValue[nameOfSecret]
       const decodedPayload = await validateToken(givenToken, signingKey)
       determineResourceAccess(decodedPayload, event)
       return resolve(decodedPayload)

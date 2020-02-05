@@ -16,7 +16,7 @@ const getItem = (TableName, Key, shouldLogParams) => {
         return resolve(foundItem.Item)
       } else {
         return reject({
-          message: 'Not found',
+          message: 'Item searched for was not found',
           statusCode: 404
         })
       }
