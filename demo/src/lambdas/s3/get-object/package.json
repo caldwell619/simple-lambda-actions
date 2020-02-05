@@ -1,12 +1,11 @@
 {
-  "name": "generate-token",
+  "name": "get-s3-object",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jsonwebtoken": "^8.5.1",
     "simple-lambda-actions": "^1.2.45"
   }
 }
