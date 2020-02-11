@@ -19,6 +19,7 @@ It got tiring writing the same lines of code, over and over to do common actions
 - [Update Item](./docs/dynamo/update-item.md)
 - [Query Items](./docs/dynamo/query-item.md)
 - [Transact Write](./docs/dynamo/transact-write.md)
+- [Batch Write](./docs/dynamo/batch-write.md)
 
 ## Secrets Manager
 

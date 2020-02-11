@@ -51,6 +51,7 @@ Returns a promise, which will resolve to:
 
 ```js
 const { fullServiceAuth } = require('simple-lambda-actions/dist/auth')
+const secretId = '...'
 const secretsManagerParams = {
   SecretId: secretId,
   nameOfSecret: 'secret'
