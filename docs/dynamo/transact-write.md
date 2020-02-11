@@ -1,5 +1,7 @@
 # Transact Write
 
+All or nothing. Either every operation you provide passes, or it all fails
+
 This library supports the following actions:
 
 - `ConditionCheck`
