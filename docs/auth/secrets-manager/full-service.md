@@ -8,12 +8,70 @@ This solution is very opinionated, and you obviously don't have to use it. The b
 4. Determine if any additional checks are necessary such as the email of the signed token needs to match the email in the request body.
 5. Return the decoded payload if all of the above checks out.
 
+## Permissions
+
+The following permissions are required to accomplish this:
+
+1. `secretsmanager:GetSecretValue`
+2. `dynamodb:GetItem`
+
+## Arguments
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `secretsManagerParams` | `Object` | [Params](https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html) of your stored secret. Must include `SecretId` and `nameOfSecret` |
+| `event` | `Object` | The event object that comes from AWS |
+| `dynamoParams` | `Object` | The values needed to find the permission on DynamoDB. The schema of which can be found [here](../../extras/auth/schemas.md) |
+
+
+## Import Path
+
+```js
+const { fullServiceAuth } = require('simple-lambda-actions/dist/auth')
+```
+
+## Response
+
+Returns a promise, which will resolve to:
+
+```js
+{
+  // your decoded token payload
+}
+```
+
+## Errors
+
+| Error Code | Text | Description |
+| :---: | --- | --- |
+| `403` | `Unauthorized` | If one of the checks done does not succeed |
+| `500` | `Internal Error` | Generic internal server error given when error does not provide code |
+
+## Example
+
+```js
+const { fullServiceAuth } = require('simple-lambda-actions/dist/auth')
+const secretsManagerParams = {
+  SecretId: secretId,
+  nameOfSecret: 'secret'
+}
+const dynamoParams = {
+  TableName: 'super-duper-table',
+  partitionKeyName: 'name_of_tables_partition_key',
+  rangeKeyName: 'name_of_tables_range_key',
+}
+
+exports.handler = async event => {
+  await fullServiceAuth(secretsManagerParams, event, dynamoParams)
+  // request is now validated
+}
+```
 
 ## Opinionated
 
 It was previously mentioned that this is opinionated. It's true. To quote the sagely words of Salt N Peppa:
 
-> Opinions are like ___ holes and everybody's got one.
+> Opinions are like ___holes and everybody's got one.
 
 So here's what this function expects. Feel free to **not use it.** I wrote this for a specific use case, so if you can benefit, great.
 
@@ -111,57 +169,3 @@ _This could also be in the request body if it was a post request_
 5. The HTTP method is evaluated against the allowed methods stored in the record.
 6. The restrictions are evaluated by taking the token payload, and comparing against the request params
 7. The auth is successful, and the decoded token is returned from the `fullServiceAuth` function.
-
-## Permissions
-
-The following permissions are required to accomplish this:
-
-1. `secretsmanager:GetSecretValue`
-2. `dynamodb:GetItem`
-
-## Arguments
-
-| Name | Type | Description |
-| --- | --- | --- |
-| `secretsManagerParams` | `Object` | [Params](https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html) of your stored secret. Must include `SecretId` and `nameOfSecret` |
-| `event` | `Object` | The event object that comes from AWS |
-| `dynamoParams` | `Object` | The values needed to find the permission on DynamoDB. The schema of which can be found [here](../../extras/auth/schemas.md) |
-
-
-## Import Path
-
-```js
-const { fullServiceAuth } = require('simple-lambda-actions/dist/auth')
-```
-
-## Response
-
-Returns a promise, which will resolve to:
-
-```js
-{
-  // your decoded token payload
-}
-```
-
-## Errors
-
-| Error Code | Text | Description |
-| :---: | --- | --- |
-| `403` | `Unauthorized` | If one of the checks done does not succeed |
-| `500` | `Internal Error` | Generic internal server error given when error does not provide code |
-
-## Example
-
-```js
-const { fullServiceAuth } = require('simple-lambda-actions/dist/auth')
-const secretsManagerParams = {
-  SecretId: secretId,
-  nameOfSecret: 'secret'
-}
-
-exports.handler = async event => {
-  await fullServiceAuth(secretsManagerParams, event)
-  // request is now validated
-}
-```

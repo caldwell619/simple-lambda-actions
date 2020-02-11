@@ -2,6 +2,12 @@
 
 Search a single table for items that match your provided params
 
+## Permissions
+
+The following permissions are required to accomplish this:
+
+1. `dynamodb:Query`
+
 ## Arguments
 
 | Name | Type | Description |

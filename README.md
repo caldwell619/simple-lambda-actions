@@ -31,7 +31,7 @@ A full service approach, fetching the secret you were likely to be using anyway.
 - [Validate Token](./docs/auth/secrets-manager/validate-token.md)
 - [Generate Token](./docs/auth/secrets-manager/generate-token.md)
 
-_*More prescriptive territory_
+_*More opinionated territory_
 - [Full Service](./docs/auth/secrets-manager/full-service.md)
 
 ## Auth Without Secrets Manager

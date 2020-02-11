@@ -1,12 +1,12 @@
 # Get Item
 
-Straightforward, getting a single object from DynamoDB
+Writing a great many things to various tables. The difference between this, and Transactional Write, is that if your 5th operation fails, you will still have written 4 items.
 
 ## Permissions
 
 The following permissions are required to accomplish this:
 
-1. `dynamodb:GetItem`
+1. `dynamodb:BatchWriteItem`
 
 ## Arguments
 

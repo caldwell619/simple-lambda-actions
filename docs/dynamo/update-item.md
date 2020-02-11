@@ -1,5 +1,16 @@
 # Update Item 
 
+Updating part of an item, without overriding it with a new one.
+
+_*Note: You **cannot** update a part of the key schema, such as partition or range_
+
+## Permissions
+
+The following permissions are required to accomplish this:
+
+1. `dynamodb:UpdateItem`
+
+
 ## Arguments
 
 | Name | Type | Description |

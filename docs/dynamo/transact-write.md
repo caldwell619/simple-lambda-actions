@@ -9,6 +9,14 @@ This library supports the following actions:
 - `Put`
 - `Update`
 
+## Permissions
+
+You need to have the permissions to match your operations. For example, if you are deleting, and putting an item, you need:
+
+1. `dynamodb:DeleteItem`
+2. `dynamodb:PutItem`
+
+
 ## Arguments
 
 | Name | Type | Description |

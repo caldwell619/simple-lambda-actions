@@ -2,6 +2,12 @@
 
 Saving or overwriting an item on a single table
 
+## Permissions
+
+The following permissions are required to accomplish this:
+
+1. `dynamodb:PutItem`
+
 ## Arguments
 
 | Name | Type | Description |
