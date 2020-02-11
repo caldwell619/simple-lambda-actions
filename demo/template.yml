@@ -103,6 +103,38 @@ Resources:
             Path: /dynamo/transact-write
             Method: post
             RestApiId: !Ref BuyNowAPI
+            
+########### S3 ###########
+  
+  GetObjectFromS3:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/s3/get-object
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /s3/get-object
+            Method: get
+            RestApiId: !Ref BuyNowAPI
+
+########### DB Seeder ###########
+  
+  PartialUserPolicySeeder:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/seeder/partial-policy
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /seeder/partial-user-policy
+            Method: post
+            RestApiId: !Ref BuyNowAPI
 
 ########### Secrets Manager ###########
   GetSecretValue:
@@ -146,6 +178,19 @@ Resources:
           Properties:
             Path: /auth/generate-token
             Method: post
+            RestApiId: !Ref BuyNowAPI
+  GenerateTokenWithPolicy:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/auth/generate-token-with-policy
+      Role: !GetAtt "LambdaActionsTestRole.Arn"
+      Handler: index.handler
+      Events:
+        Test:
+          Type: Api
+          Properties:
+            Path: /auth/generate-token/policy
+            Method: get
             RestApiId: !Ref BuyNowAPI
   ValidateResourcePermissions:
     Type: AWS::Serverless::Function

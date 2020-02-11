@@ -1,0 +1,11 @@
+{
+  "name": "partial-policy-seeder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "simple-lambda-actions": "^1.2.51"
+  }
+}

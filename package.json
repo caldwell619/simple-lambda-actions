@@ -1,6 +1,6 @@
 {
 	"name": "simple-lambda-actions",
-	"version": "1.2.40",
+	"version": "1.2.53",
 	"description": "Library for common lambda actions",
 	"main": "dist/index.js",
 	"author": "Christopher Caldwell",
@@ -9,7 +9,7 @@
 		"url": "https://github.com/caldwell619/simple-lambda-actions"
 	},
 	"bugs": {
-		 "url" : "https://github.com/caldwell619/simple-lambda-actions/issues"
+		"url": "https://github.com/caldwell619/simple-lambda-actions/issues"
 	},
 	"files": [
 		"dist/*"

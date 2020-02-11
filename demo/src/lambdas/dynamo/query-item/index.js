@@ -9,13 +9,15 @@ exports.handler = async event => {
   const responseConfig = extractResponseParams(event.httpMethod, config)
   const ResponseHandler = new Responder(responseConfig)
   const { identifier, resourceType } = event.queryStringParameters
+  // setting default operator to begins_with if none provided
+  const rangeKeyComparisonOperator = event.queryStringParameters.rangeKeyComparisonOperator || 'begins_with'
   const params = {
     TableName,
     partitionKeyName, 
     rangeKeyName, 
     partitionKeySearchTerm: identifier, 
     rangeKeySearchTerm: resourceType, 
-    rangeKeyComparisonOperator: 'begins_with'
+    rangeKeyComparisonOperator
   }
   try {
     const { Items } = await queryItem(params, true)

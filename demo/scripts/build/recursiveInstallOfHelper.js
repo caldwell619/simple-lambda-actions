@@ -1,8 +1,9 @@
 const path = require('path')
 const fs = require('fs')
 const child_process = require('child_process')
-const installCommand = 'npm i -S simple-lambda-actions@latest'
-const locationToBegin = "src/lambdas"
+// const installCommand = 'npm i -S simple-lambda-actions@latest'
+const installCommand = 'npm update'
+const locationToBegin = 'src/lambdas'
 
 // Recurses into a folder
 const npm_install_recursive = folder => {
