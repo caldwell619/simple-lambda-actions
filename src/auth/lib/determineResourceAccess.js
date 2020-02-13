@@ -1,24 +1,26 @@
 const CustomError = require('../../util/ErrorHandler')
-const findAttemptedResource = require('./helpers/findAttemptedResource')
 const testTokenPermissions = require('./helpers/testTokenPermissions')
+const getItem = require('../../dynamo/lib/getItem').default
 
-// statements
-const testAttemptedResourceAccess = (decodedPayload, event) =>  {
-  const { httpMethod, path } = event
-  const givenParamsFromToken = {
-    admin: decodedPayload.admin,
-    user: decodedPayload.user,
-    Action: httpMethod,
-    Resource: path
+const testAttemptedResourceAccess = async (decodedPayload, event, dynamoParams) =>  {
+  const { path } = event
+  const { TableName, partitionKeyName, rangeKeyName } = dynamoParams
+  const role = decodedPayload.role
+  const dynamoGetParams = {
+    [partitionKeyName]: path,
+    [rangeKeyName]: role
   }
-  const authPermissions = decodedPayload.statements
   try {
-    const attemptedResource = findAttemptedResource(authPermissions, givenParamsFromToken)
-    testTokenPermissions(event, attemptedResource)
+    const attemptedResource = await getItem(TableName, dynamoGetParams)
+    testTokenPermissions(event, decodedPayload, attemptedResource)
   } catch(error){
+    // if the record can't be found, it's equivalent of them not having permissions
+    const statusCode = error.statusCode === 404
+      ? 403
+      : error.statusCode
     throw new CustomError({
       message: error.message,
-      statusCode: error.statusCode
+      statusCode
     })
   }
 }

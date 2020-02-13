@@ -1,16 +1,20 @@
 const { generateTokenWithSecretsManager } = require('simple-lambda-actions/dist/auth')
 const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
-const { statements } = require('./partial-user')
-const SecretId = process.env.SIGNING_KEY_NAME
 
+const SecretId = process.env.SECRET_NAME
+const nameOfSecret = process.env.SIGNING_KEY_NAME
+const secretManagerParams = { SecretId, nameOfSecret }
+
+const expiryDurationOfToken = '12h'
 const config = {}
 
 exports.handler = async event => {
   const responseConfig = extractResponseParams(event.httpMethod, config)
   const ResponseHandler = new Responder(responseConfig)
-  const parsedBody = JSON.parse(event.body)
+  const emailAddress = event.queryStringParameters.emailAddress
+  const user = { role: 'full-user', emailAddress }
   try {
-    const token = await generateTokenWithSecretsManager(SecretId, { ...parsedBody, statements}, '12h')
+    const token = await generateTokenWithSecretsManager(secretManagerParams, user, expiryDurationOfToken)
     return ResponseHandler.respond({ token }, 200)
   } catch(error){
     console.error('error post item --> ', error)

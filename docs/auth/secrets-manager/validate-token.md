@@ -6,7 +6,7 @@ Fetches a key from Secrets Manager, then validates the token with it.
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `secretsManagerParams` | `Object` | [Params](https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html) of your stored secret |
+| `secretsManagerParams` | `Object` | [Params](https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html) of your stored secret. Must include `SecretId` and `nameOfSecret` |
 | `givenToken` | `String` | The token you wish to validate |
 
 ## Import Path

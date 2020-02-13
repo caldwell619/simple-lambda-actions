@@ -1,21 +1,20 @@
 const getSecretValue = require('../../secrets-manager/getSecretValue')
 const generateToken = require('../lib/generateToken')
+const CustomError = require('../../util/ErrorHandler')
 
-const generateTokenWithSecretsManager = (secretsManagerParams, payloadToEncode, expiresIn) => {
+const generateTokenWithSecretsManager = async (secretsManagerParams, payloadToEncode, expiresIn) => {
   const { SecretId, nameOfSecret } = secretsManagerParams
-  return new Promise(async (resolve, reject) => {
-    try {
-      const secretValue = await getSecretValue({ SecretId })
-      const signingKey = secretValue[nameOfSecret]
-      const token = await generateToken(payloadToEncode, expiresIn, signingKey)
-      return resolve(token)
-    } catch(error){
-      return reject({
-        message: error.message,
-        statusCode: error.statusCode
-      })
-    }
-  })
+  try {
+    const secretValue = await getSecretValue({ SecretId })
+    const signingKey = secretValue[nameOfSecret]
+    const token = generateToken(payloadToEncode, expiresIn, signingKey)
+    return token
+  } catch(error){
+    throw new CustomError({
+      message: error.message,
+      statusCode: error.statusCode
+    })
+  }
 }
 
 module.exports = generateTokenWithSecretsManager

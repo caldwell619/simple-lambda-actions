@@ -14,6 +14,7 @@ Globals:
       Variables:
         TABLE_NAME: !Sub ${TABLE_NAME}
         SIGNING_KEY_NAME: !Sub ${SIGNING_KEY_NAME}
+        SECRET_NAME: !Sub ${SECRET_NAME}
         TABLE_PARTITION_KEY: !Sub ${TABLE_PARTITION_KEY}
         TABLE_RANGE_KEY: !Sub ${TABLE_RANGE_KEY}
 Resources:
@@ -177,19 +178,6 @@ Resources:
           Type: Api
           Properties:
             Path: /auth/generate-token
-            Method: post
-            RestApiId: !Ref BuyNowAPI
-  GenerateTokenWithPolicy:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/lambdas/auth/generate-token-with-policy
-      Role: !GetAtt "LambdaActionsTestRole.Arn"
-      Handler: index.handler
-      Events:
-        Test:
-          Type: Api
-          Properties:
-            Path: /auth/generate-token/policy
             Method: get
             RestApiId: !Ref BuyNowAPI
   ValidateResourcePermissions:
@@ -215,7 +203,7 @@ Resources:
         Test:
           Type: Api
           Properties:
-            Path: /auth/{institutionId}/full-service
+            Path: /auth/full-service
             Method: post
             RestApiId: !Ref BuyNowAPI
 

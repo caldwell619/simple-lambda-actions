@@ -5,48 +5,43 @@ const combineParamsFromEvent = event => {
   return {
     ...bodyParser(event.body) || {},
     ...event.queryStringParameters,
-    ...event.pathParameters
   }
 }
 
-const compareActionsAgainstRestrictions = (testSet, combinedParams) => {
+const compareActionsAgainstRestrictions = (requiredChecks, combinedParams, decodedPayload) => {
   let doesPass = true
-  Object.entries(testSet).forEach(param => {
-    const key = param[0]
-    const value = param[1]
-    if(value !== combinedParams[key]){
-      console.error(`Given payload does not match key: ${key}. Policy statement value: ${combinedParams[key]} testing against token value: ${value}`)
+  Object.keys(requiredChecks).forEach(requiredCheck => {
+    if(decodedPayload[requiredCheck] !== combinedParams[requiredCheck]){
+      console.error(`Given payload does not match key: ${requiredCheck}. Policy statement value: ${combinedParams[requiredCheck]} testing against token value: ${decodedPayload[requiredCheck]}`)
       doesPass = false
     }
   })
   return doesPass
 }
 
-const lookThroughParamsForRequiredValues = (combinedParams, attemptedResource) => {
-  const testSet = attemptedResource.restriction.equals
+const lookThroughParamsForRequiredValues = (combinedParams, attemptedResource, decodedPayload) => {
+  const requiredChecks = attemptedResource.restrictions
 
   // go through the test set comparing each value to the combined params
-  const doActionsPass = compareActionsAgainstRestrictions(testSet, combinedParams)
+  const doActionsPass = compareActionsAgainstRestrictions(requiredChecks, combinedParams, decodedPayload)
   return doActionsPass
 }
 
-// statement contains array of allowable methods - look through them and compare with current
 const compareAllowableMethodsAgainstCurrent = (allowedMethods, currentMethod) => {
-  const targetMethod = allowedMethods.find(method => method === currentMethod)
-  return !!targetMethod
+  return allowedMethods[currentMethod]
 }
 
-const validatePolicyPermissionsWithToken = (combinedParams, attemptedResource, currentMethod) => {
-  const allowedMethods = attemptedResource.action
-  const doParamsPass = lookThroughParamsForRequiredValues(combinedParams, attemptedResource)
+const validatePolicyPermissionsWithToken = (decodedPayload, combinedParams, attemptedResource, currentMethod) => {
+  const allowedMethods = attemptedResource.methodsAllowed
+  const doParamsPass = lookThroughParamsForRequiredValues(combinedParams, attemptedResource, decodedPayload)
   const doesMethodPass = compareAllowableMethodsAgainstCurrent(allowedMethods, currentMethod)
   return doParamsPass && doesMethodPass
 }
 
-const testTokenAgainstPolicyPermissions = (event, attemptedResource) => {
+const testTokenAgainstPolicyPermissions = (event, decodedPayload, attemptedResource) => {
   const combinedParams = combineParamsFromEvent(event)
   const currentMethod = event.httpMethod
-  const doesPass = validatePolicyPermissionsWithToken(combinedParams, attemptedResource, currentMethod)
+  const doesPass = validatePolicyPermissionsWithToken(decodedPayload, combinedParams, attemptedResource, currentMethod)
   if(!doesPass){
     throw new CustomError({
       message: 'Given payload does not match requirements',
