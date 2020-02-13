@@ -6,6 +6,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "simple-lambda-actions": "^1.2.51"
+    "simple-lambda-actions": "^1.2.55"
   }
 }
