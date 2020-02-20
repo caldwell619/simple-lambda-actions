@@ -1,6 +1,6 @@
 {
 	"name": "simple-lambda-actions",
-	"version": "1.2.55",
+	"version": "1.2.56",
 	"description": "Library for common lambda actions",
 	"main": "dist/index.js",
 	"author": "Christopher Caldwell",
