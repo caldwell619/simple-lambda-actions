@@ -1,6 +1,6 @@
 # Batch Write
 
-Writing a great many things to various tables. The difference between this, and Transactional Write, is that if your 5th operation fails, you will still have written 4 items.
+Writing a great many things to various tables. The difference between this, and Transactional Write, is that if your 5th operation fails, you will still have written 4 items. More info from [the docs](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html)
 
 ## Permissions
 
