@@ -27,16 +27,6 @@ const responseHandler = (headers, body, statusCode) => {
   return responseObject
 }
 
-const extractResponseParams = (httpMethod, config) => {
-  let corsUrl 
-  if(config && config.aws && config.aws.domains){
-    corsUrl = `https://${config.aws.domains.client}.${config.aws.domains.root}`
-  } else {
-    corsUrl = '*'
-  }
-  return { corsUrl, httpMethod }
-}
-
 class Responder {
   constructor(config){
     this.headers = createHeaders(config.corsUrl, config.httpMethod)
@@ -47,7 +37,4 @@ class Responder {
   }
 }
 
-module.exports = {
-  Responder,
-  extractResponseParams
-}
+module.exports = Responder

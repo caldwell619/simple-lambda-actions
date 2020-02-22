@@ -1,12 +1,11 @@
 const { batchWrite } = require('simple-lambda-actions/dist/dynamo')
-const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
+const Responder = require('simple-lambda-actions/dist/util/responseHandler')
 const aggregatedPolicies = require('./lib/index')
 const TableName = process.env.TABLE_NAME
-const config = {}
+const corsUrl = process.env.CORS_URL
 
 exports.handler = async event => {
-  const responseConfig = extractResponseParams(event.httpMethod, config)
-  const ResponseHandler = new Responder(responseConfig)
+  const ResponseHandler = new Responder(corsUrl, event.httpMethod)
   try {
     await batchWrite(TableName, aggregatedPolicies)
     return ResponseHandler.respond({message: 'done'}, 200)

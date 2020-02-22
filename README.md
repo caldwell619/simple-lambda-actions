@@ -2,6 +2,21 @@
 
 A collection of common operations done with [AWS Lambda](https://aws.amazon.com/lambda/?nc2=h_ql_prod_cp_lbd)
 
+<p align="center">
+<!-- version of package -->
+<a href="https://www.npmjs.com/package/@simple-lambda-actions/core" target="__blank">
+<img src="https://img.shields.io/npm/v/simple-lambda-actions" alt="NPM version" /></a>
+<!-- Downloads -->
+<a href="https://www.npmjs.com/package/@vueuse/core" target="__blank"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/simple-lambda-actions"/></a>
+<!-- Last commit -->
+<a href="https://github.com/caldwell619/simple-lambda-actions" target="__blank"><img src="https://img.shields.io/github/last-commit/caldwell619/simple-lambda-actions.svg?color=a38eed" alt="GitHub last commit" /></a>
+<!-- Issues -->
+<a href="https://github.com/caldwell619/simple-lambda-actions/issues" target="__blank"><img src="https://img.shields.io/github/issues/caldwell619/simple-lambda-actions.svg?color=c977be" alt="GitHub issues" /></a>
+<!-- Stars -->
+<a href="https://github.com/caldwell619/simple-lambda-actions" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/caldwell619/simple-lambda-actions?style=social"></a>
+</p>
+
+
 ## What Purpose Does this Serve?
 
 It got tiring writing the same lines of code, over and over to do common actions. The SDK is great, but sometimes requires a bit of setup. This library aims to manage the setup a bit, and let's you just call the operation.
