@@ -1,4 +1,4 @@
-# Common Lambda Actions
+# Simple Lambda Actions
 
 A collection of common operations done with [AWS Lambda](https://aws.amazon.com/lambda/?nc2=h_ql_prod_cp_lbd)
 
