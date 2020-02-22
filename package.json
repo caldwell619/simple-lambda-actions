@@ -15,9 +15,6 @@
 		"dist/*"
 	],
 	"scripts": {
-		"test:unit": "jest /tests/unit",
-		"jest:integration": "jest /tests/integration",
-		"test:integration": "sh tests/integration/test.sh",
 		"lint": "eslint --no-fix src/",
 		"release": "standard-version",
 		"publish-release": "git push --follow-tags origin master && npm publish",
