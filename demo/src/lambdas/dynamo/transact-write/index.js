@@ -1,14 +1,13 @@
 const { transactWrite } = require('simple-lambda-actions/dist/dynamo')
-const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
+const Responder = require('simple-lambda-actions/dist/util/responseHandler')
+
+const corsUrl = process.env.CORS_URL
 const TableName = process.env.TABLE_NAME
 const partitionKeyName = process.env.TABLE_PARTITION_KEY
 const rangeKeyName = process.env.TABLE_RANGE_KEY
-const config = {}
 
 exports.handler = async event => {
-  const responseConfig = extractResponseParams(event.httpMethod, config)
-  const ResponseHandler = new Responder(responseConfig)
-  // const parsedBody = JSON.parse(event.body)
+  const ResponseHandler = new Responder(corsUrl, event.httpMethod)
   const params = [
     {
       operationType: 'delete',

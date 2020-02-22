@@ -1,12 +1,11 @@
 const { getItem } = require('simple-lambda-actions/dist/dynamo')
-const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
-const tableName = process.env.TABLE_NAME
-const config = {}
+const Responder = require('simple-lambda-actions/dist/util/responseHandler')
 
+const corsUrl = process.env.CORS_URL
+const tableName = process.env.TABLE_NAME
 
 exports.handler = async event => {
-  const responseConfig = extractResponseParams(event.httpMethod, config)
-  const ResponseHandler = new Responder(responseConfig)
+  const ResponseHandler = new Responder(corsUrl, event.httpMethod)
   try {
     const { partitionKey, rangeKey } = event.queryStringParameters
     const keySchema = { 

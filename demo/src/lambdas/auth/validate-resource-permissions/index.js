@@ -1,12 +1,10 @@
 const { validateTokenWithSecretsManager, determineResourceAccess } = require('simple-lambda-actions/dist/auth')
-const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
-const config = {}
+const Responder = require('simple-lambda-actions/dist/util/responseHandler')
+const corsUrl = process.env.CORS_URL
 const SecretId = process.env.SIGNING_KEY_NAME
 
 exports.handler = async event => {
-  const responseConfig = extractResponseParams(event.httpMethod, config)
-  const ResponseHandler = new Responder(responseConfig)
-  
+  const ResponseHandler = new Responder(corsUrl, event.httpMethod)
   try {
     const givenToken = event.headers['Authorization'] || ''
     const decodedPayload = await validateTokenWithSecretsManager(SecretId, givenToken)

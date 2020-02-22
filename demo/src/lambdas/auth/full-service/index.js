@@ -1,6 +1,6 @@
 const { fullServiceAuth } = require('simple-lambda-actions/dist/auth')
-const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
-const config = {}
+const Responder = require('simple-lambda-actions/dist/util/responseHandler')
+const corsUrl = process.env.CORS_URL
 // secrets
 const SecretId = process.env.SECRET_NAME
 const nameOfSecret = process.env.SIGNING_KEY_NAME
@@ -13,8 +13,7 @@ const dynamoParams = {
 }
 
 exports.handler = async event => {
-  const responseConfig = extractResponseParams(event.httpMethod, config)
-  const ResponseHandler = new Responder(responseConfig)
+  const ResponseHandler = new Responder(corsUrl, event.httpMethod)
   try {
     const decodedToken = await fullServiceAuth(secretManagerParams, event, dynamoParams)
     return ResponseHandler.respond({tokenPayload: decodedToken}, 200)

@@ -1,11 +1,11 @@
 const { putItem } = require('simple-lambda-actions/dist/dynamo')
-const { Responder, extractResponseParams } = require('simple-lambda-actions/dist/util/responseHandler')
+const Responder = require('simple-lambda-actions/dist/util/responseHandler')
+
 const tableName = process.env.TABLE_NAME
-const config = {}
+const corsUrl = process.env.CORS_URL
 
 exports.handler = async event => {
-  const responseConfig = extractResponseParams(event.httpMethod, config)
-  const ResponseHandler = new Responder(responseConfig)
+  const ResponseHandler = new Responder(corsUrl, event.httpMethod)
   const parsedBody = JSON.parse(event.body)
   try {
     await putItem(tableName, parsedBody, true)
