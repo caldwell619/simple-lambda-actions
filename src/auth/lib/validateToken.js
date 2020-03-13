@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+const verify = require('jsonwebtoken/verify')
 const CustomError = require('../../util/ErrorHandler')
 
 const validateToken = (givenToken, signingKey) => {  
@@ -15,7 +15,7 @@ const validateToken = (givenToken, signingKey) => {
     })
   }
   try {
-    const tokenData = jwt.verify(givenToken, signingKey)
+    const tokenData = verify(givenToken, signingKey)
     return tokenData
   } catch(error){
     throw new CustomError({
