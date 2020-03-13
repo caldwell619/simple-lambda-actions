@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.61](https://github.com/caldwell619/simple-lambda-actions/compare/v1.2.60...v1.2.61) (2020-03-13)
+
 ### [1.2.60](https://github.com/caldwell619/simple-lambda-actions/compare/v1.2.59...v1.2.60) (2020-03-11)
 
 ### [1.2.59](https://github.com/caldwell619/simple-lambda-actions/compare/v1.2.58...v1.2.59) (2020-03-10)
