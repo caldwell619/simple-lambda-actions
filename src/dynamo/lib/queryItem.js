@@ -14,7 +14,7 @@ const queryItem = async (config, shouldLogParams) => {
     if (dynamoResponse.Count === 0) {
       throw new CustomError({ message: noRecordFoundResponse, statusCode: 404 })
     }
-    return dynamoResponse
+    return dynamoResponse.Items
   } catch(error) {
     console.error('error querying --> ', error)
     throw new CustomError({

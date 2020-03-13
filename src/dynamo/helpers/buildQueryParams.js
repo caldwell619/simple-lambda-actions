@@ -10,14 +10,21 @@ const allowableComparisonOperators = {
   'contains': true,
 }
 
-const determineIfRangeKeyIsUsed = (searchConfig) => {
+const determineIfRangeKeyIsUsed = searchConfig => {
   const {
     partitionKeyName, 
     rangeKeyName, 
     partitionKeySearchTerm, 
     rangeKeySearchTerm, 
-    rangeKeyComparisonOperator
+    rangeKeyComparisonOperator,
+    indexToQuery
   } = searchConfig
+
+  let IndexName = indexToQuery
+
+  if(!indexToQuery) {
+    IndexName = partitionKeyName
+  }
 
   // if a key was provided, but does not match
   if(rangeKeyComparisonOperator && !allowableComparisonOperators[rangeKeyComparisonOperator]) {
@@ -35,15 +42,16 @@ const determineIfRangeKeyIsUsed = (searchConfig) => {
       ':ran': rangeKeySearchTerm
     }  
   }
-  return { KeyConditionExpression, ExpressionAttributeValues}
+  return { KeyConditionExpression, ExpressionAttributeValues, IndexName }
 }
 
 const buildQueryParams = (config) => {
   // setting the values to a default to null if not provided
   const { filterExpression, projectionExpression, TableName } = config
-  const { KeyConditionExpression, ExpressionAttributeValues } = determineIfRangeKeyIsUsed(config)
+  const { KeyConditionExpression, ExpressionAttributeValues, IndexName } = determineIfRangeKeyIsUsed(config)
   return {
     TableName,
+    IndexName,
     FilterExpression: filterExpression,
     ProjectionExpression: projectionExpression,
     KeyConditionExpression,

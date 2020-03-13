@@ -5,10 +5,8 @@ const CustomError = require('../../util/ErrorHandler')
 
 const fullServiceAuth = async (secretsManagerParams, event, dynamoParams) => {
   const givenToken = event.headers['Authorization'] || ''
-  const { SecretId, nameOfSecret } = secretsManagerParams
   try {
-    const secretValue = await getSecretValue({ SecretId })
-    const signingKey = secretValue[nameOfSecret]
+    const signingKey = await getSecretValue(secretsManagerParams)
     const decodedPayload = validateToken(givenToken, signingKey)
     determineResourceAccess(decodedPayload, event, dynamoParams)
     return decodedPayload

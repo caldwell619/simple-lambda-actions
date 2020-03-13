@@ -3,11 +3,13 @@ const secretsManager = new SecretsManager()
 const CustomError = require('../util/ErrorHandler')
 
 const getSigningKey = async secretsParams => {
+  const { SecretId, nameOfSecret } = secretsParams
   try {
     const secretsManagerResponse = await secretsManager
-      .getSecretValue(secretsParams)
+      .getSecretValue(SecretId)
       .promise()
-    return JSON.parse(secretsManagerResponse.SecretString)
+    const secretValue = JSON.parse(secretsManagerResponse.SecretString)
+    return secretValue[nameOfSecret]
   } catch(error){
     console.error('error inside of secrets manager --> ', error)
     throw new CustomError({
