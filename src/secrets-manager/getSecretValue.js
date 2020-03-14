@@ -9,7 +9,7 @@ const getSigningKey = async secretsParams => {
   const { SecretId, nameOfSecret } = secretsParams
   try {
     const secretsManagerResponse = await secretsManager
-      .getSecretValue(SecretId)
+      .getSecretValue({ SecretId })
       .promise()
     const secretValue = JSON.parse(secretsManagerResponse.SecretString)
     return secretValue[nameOfSecret]
