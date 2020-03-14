@@ -3,6 +3,9 @@ const secretsManager = new SecretsManager()
 const CustomError = require('../util/ErrorHandler')
 
 const getSigningKey = async secretsParams => {
+  if(process.env.AWS_SAM_LOCAL){
+    return 'secret'
+  }
   const { SecretId, nameOfSecret } = secretsParams
   try {
     const secretsManagerResponse = await secretsManager
